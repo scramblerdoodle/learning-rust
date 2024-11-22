@@ -12,11 +12,33 @@ fn main() {
     //let s1 = String::from("Hello");
     //ownership(s1);
     //println!("{s1}");
+
+    let mut s1 = String::new();
+    let s2 = String::from("abc");
+
+    for c in s2.chars() {
+        s1.push(c);
+    }
+    println!("{}", s1);
+
+    let s: [char; 3] = ['a', 'b', 'c'];
+    let mut b = String::new();
+    for c in s.iter() {
+        b.push(*c);
+    }
+    println!("{}", b);
+
+    let s3: String = s2.chars().rev().collect();
+    println!("{}", s2);
+    println!("{}", s3);
+
+    println!("{}", '0'.is_digit(10));
 }
 
 //
 // OWNERSHIP TEST
 //
+#[allow(dead_code)]
 fn ownership(mut s: String) -> () {
     s.push_str(" World");
     s.push_str("!");
