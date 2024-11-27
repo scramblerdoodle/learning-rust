@@ -1,5 +1,6 @@
 pub mod day1;
 pub mod day2;
+pub mod day3;
 
 use std::io::stdin;
 fn main() {
@@ -25,6 +26,9 @@ fn main() {
             2 => {
                 println!("{}", day2::cube_conundrum("actual"));
                 println!("{}", day2::cube_conundrum("actual_v2"));
+            }
+            3 => {
+                println!("{}", day3::decipher_schematic("actual"));
             }
             _ => todo!(),
         }
