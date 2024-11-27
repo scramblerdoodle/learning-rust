@@ -119,19 +119,45 @@ mod schematic_processor {
                 }
             }
         }
+        cumulative_sum
+    }
+
+    pub fn process_v2(filename: &str) -> u32 {
+        let m = build_matrix(filename);
+        let mut mc = build_check_matrix(&m);
+        let mut cumulative_sum = 0;
+
         for i in 0..m.len() {
-            let mcs: String = mc[i]
-                .clone()
-                .into_iter()
-                .map(|i| match i {
-                    0 => ".".to_string(),
-                    i => i.to_string(),
-                })
-                .collect::<String>();
-            println!("{mcs}");
-            // println!("{:?}", mc[i]);
+            for j in 0..m[i].len() {
+                if m[i][j] == '*' {
+                    // check surroundings, whole schbang about not going out of bounds etc
+                    let locations = get_locations(i, j, &m.len(), &m[i].len());
+                    let mut neighboring_numbers: Vec<u32> = vec![];
+
+                    for (k_i, k_j) in locations {
+                        // if a digit is found, magic stuff will happen
+                        if m[k_i][k_j].is_digit(10) && mc[k_i][k_j] == 0 {
+                            // keep a different matrix keeping track of saved digits
+                            //  e.g.    4 6 7        1 1 1
+                            //          . # .   =>   0 0 0
+                            //          1 4 6        0 0 0
+                            //      after finding 467 it's marked as 1
+                            neighboring_numbers.push(get_number(
+                                k_i,
+                                k_j,
+                                &m[i].len(),
+                                &m,
+                                &mut mc,
+                            ));
+                        }
+                    }
+
+                    if neighboring_numbers.len() == 2 {
+                        cumulative_sum += neighboring_numbers.iter().product::<u32>();
+                    }
+                }
+            }
         }
-        println!("{cumulative_sum}");
         cumulative_sum
     }
 }
@@ -139,7 +165,9 @@ mod schematic_processor {
 pub fn decipher_schematic(s: &str) -> u32 {
     match s {
         "example" => schematic_processor::process("./tests/day3_example.txt"),
+        "example_v2" => schematic_processor::process_v2("./tests/day3_example.txt"),
         "actual" => schematic_processor::process("./tests/day3.txt"),
+        "actual_v2" => schematic_processor::process_v2("./tests/day3.txt"),
         _ => todo!(),
     }
 }
@@ -150,6 +178,11 @@ mod tests {
     #[test]
     fn test_example() {
         assert_eq!(decipher_schematic("example"), 4372);
+    }
+
+    #[test]
+    fn test_example_v2() {
+        assert_eq!(decipher_schematic("example_v2"), 467835);
     }
 
     #[test]

@@ -29,6 +29,7 @@ fn main() {
             }
             3 => {
                 println!("{}", day3::decipher_schematic("actual"));
+                println!("{}", day3::decipher_schematic("actual_v2"));
             }
             _ => todo!(),
         }
