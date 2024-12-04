@@ -21,8 +21,14 @@ const NUMBERS: [&str; 10] = [
     "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
 ];
 const NUMBERS_REV: [&str; 10] = [
-    "orez", "ene", "owt", "eerht", "ruof", "evif", "xis", "neves", "thgie", "enin",
+    "orez", "eno", "owt", "eerht", "ruof", "evif", "xis", "neves", "thgie", "enin",
 ];
+
+// fn number_set() -> &'static HashSet<&'static str> {
+//     static HASHMAP: OnceLock<HashSet<&'static str>> = OnceLock::new();
+//     HASHMAP.get_or_init(|| HashSet::from_iter(NUMBERS))
+//     // HASHMAP.get_or_init(|| HashSet::from_iter(NUMBERS.map(|c| c.to_string().chars().rev())))
+// }
 
 // {"zero", "one", "two", ...}
 macro_rules! make_number_set {
@@ -104,7 +110,7 @@ fn extract_digits_v2(strs: Vec<String>) -> u32 {
                 nums.push(c);
             } else if {
                 let extended_str = format!("{}{}", buf, c);
-                println!("{}", extended_str);
+                // println!("{}", extended_str);
                 number_set_incremental_str().contains(&extended_str[..])
             } {
                 buf.push(c);
@@ -125,7 +131,7 @@ fn extract_digits_v2(strs: Vec<String>) -> u32 {
         all_nums.push(number);
     }
 
-    println!("{:?}", all_nums);
+    // println!("{:?}", all_nums);
     all_nums.iter().sum::<u32>()
 }
 
@@ -286,17 +292,19 @@ mod tests {
         assert_eq!(trebuchet("actual"), 55447);
     }
 
-    //#[test]
-    //fn test_actual_v2() {
-    //    assert!(trebuchet("actual2") > 54569);
-    //    assert!(trebuchet("actual2") < 54729);
-    //}
-    //
-    //#[test]
-    //fn test_actual_v3() {
-    //    assert!(trebuchet("actual3") > 54569);
-    //    assert!(trebuchet("actual3") < 54729);
-    //}
+    #[test]
+    fn test_actual_v2() {
+        assert!(trebuchet("actual2") > 54569);
+        assert!(trebuchet("actual2") < 54729);
+        assert_ne!(trebuchet("actual2"), 54670);
+    }
+
+    #[test]
+    fn test_actual_v3() {
+        assert!(trebuchet("actual3") > 54569);
+        assert!(trebuchet("actual3") < 54729);
+        assert_ne!(trebuchet("actual3"), 54670);
+    }
 
     #[test]
     fn test_extract_digits() {

@@ -22,7 +22,10 @@ fn main() {
 
         match input {
             0 => break,
-            1 => println!("{}", day1::trebuchet("actual")),
+            1 => {
+                println!("{}", day1::trebuchet("actual"));
+                println!("{}", day1::trebuchet("actual2"));
+            }
             2 => {
                 println!("{}", day2::cube_conundrum("actual"));
                 println!("{}", day2::cube_conundrum("actual_v2"));
