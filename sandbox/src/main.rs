@@ -1,3 +1,9 @@
+use std::{
+    cmp::Ordering,
+    io::{self, Write},
+    thread, time,
+};
+
 fn main() {
     variables();
     func(10);
@@ -33,6 +39,66 @@ fn main() {
     println!("{}", s3);
 
     println!("{}", '0'.is_digit(10));
+
+    let mut v = Vec::from_iter(1..=10);
+    v.sort_by(|a, b| custom_ordering(*a, *b));
+    println!("{:?}", v);
+
+    print_stuff();
+
+    let msgs = vec!["[=  ]", "[ = ]", "[  =]", "[ = ]"];
+    loop {
+        for msg in msgs.iter() {
+            print_flush((*msg).to_string());
+        }
+    }
+}
+
+//
+// PRINT FLUSH
+//
+fn print_flush(msg: String) {
+    print!("{}\r", msg);
+    io::stdout().flush().unwrap();
+    thread::sleep(time::Duration::from_millis(200));
+}
+
+use std::fmt;
+
+struct LinePrinter(Vec<Vec<u8>>);
+
+impl fmt::Display for LinePrinter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        // Join each inner Vec<u8> with a newline.
+        let lines: Vec<String> = self
+            .0
+            .iter()
+            .map(|line| String::from_utf8_lossy(line).into_owned())
+            .collect();
+
+        write!(f, "{}", lines.join("\n"))
+    }
+}
+
+fn print_stuff() {
+    let data: Vec<Vec<u8>> = vec![
+        vec![72, 101, 108, 108, 111], // "Hello"
+        vec![87, 111, 114, 108, 100], // "World"
+    ];
+
+    let printer = LinePrinter(data);
+    println!("{}", printer); // This will print "Hello\nWorld"
+}
+
+//
+// CUSTOM ORDERING TEST
+//
+fn custom_ordering(a: i32, b: i32) -> Ordering {
+    match a.cmp(&b) {
+        Ordering::Less => Ordering::Greater,
+        Ordering::Greater => Ordering::Less,
+        Ordering::Equal => Ordering::Equal,
+    }
 }
 
 //
